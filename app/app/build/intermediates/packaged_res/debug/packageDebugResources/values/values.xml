@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="amber">#F59E0B</color>
+    <color name="amber_dark">#1C1005</color>
+    <color name="bg">#0E0D0B</color>
+    <color name="border">#2A241A</color>
+    <color name="green">#4ADE80</color>
+    <color name="grey">#A89F8D</color>
+    <color name="grey2">#6E6656</color>
+    <color name="red">#F87171</color>
+    <color name="surface">#17140F</color>
+    <color name="white">#F3EFE8</color>
+    <string name="app_name">BorrowTrack</string>
+    <style name="Theme.BorrowTrack" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:navigationBarColor">@color/bg</item>
+        <item name="android:colorBackground">@color/bg</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorSecondary">@color/grey</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

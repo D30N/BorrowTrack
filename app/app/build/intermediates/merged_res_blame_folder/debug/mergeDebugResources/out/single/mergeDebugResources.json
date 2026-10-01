@@ -1,0 +1,94 @@
+[
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/drawable_card.xml.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/drawable/card.xml"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/drawable_field.xml.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/drawable/field.xml"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/drawable_btn_amber.xml.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/drawable/btn_amber.xml"
+    },
+    {
+        "merged": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-debug-7:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/home/hatch/workspace/android-toolchain/gradle-home/daemon/8.7/com.deon.borrowtrack.app-main-9:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.deon.borrowtrack.app-debug-7:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.deon.borrowtrack.app-main-9:/mipmap-xhdpi/ic_launcher_round.png"
+    }
+]

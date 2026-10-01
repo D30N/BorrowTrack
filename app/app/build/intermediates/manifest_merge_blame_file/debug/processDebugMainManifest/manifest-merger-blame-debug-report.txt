@@ -1,0 +1,83 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.deon.borrowtrack"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+11-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:4:5-77
+11-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:4:22-74
+12    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+12-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:5:5-79
+12-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:5:22-76
+13
+14    <permission
+14-->[androidx.core:core:1.9.0] /home/hatch/workspace/android-toolchain/gradle-home/caches/transforms-4/c6e6c6d5f1df1a60c32f7f97ad6b0686/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+15        android:name="com.deon.borrowtrack.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+15-->[androidx.core:core:1.9.0] /home/hatch/workspace/android-toolchain/gradle-home/caches/transforms-4/c6e6c6d5f1df1a60c32f7f97ad6b0686/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+16        android:protectionLevel="signature" />
+16-->[androidx.core:core:1.9.0] /home/hatch/workspace/android-toolchain/gradle-home/caches/transforms-4/c6e6c6d5f1df1a60c32f7f97ad6b0686/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+17
+18    <uses-permission android:name="com.deon.borrowtrack.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+18-->[androidx.core:core:1.9.0] /home/hatch/workspace/android-toolchain/gradle-home/caches/transforms-4/c6e6c6d5f1df1a60c32f7f97ad6b0686/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+18-->[androidx.core:core:1.9.0] /home/hatch/workspace/android-toolchain/gradle-home/caches/transforms-4/c6e6c6d5f1df1a60c32f7f97ad6b0686/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+19
+20    <application
+20-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:7:5-30:19
+21        android:allowBackup="true"
+21-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:8:9-35
+22        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+22-->[androidx.core:core:1.9.0] /home/hatch/workspace/android-toolchain/gradle-home/caches/transforms-4/c6e6c6d5f1df1a60c32f7f97ad6b0686/transformed/core-1.9.0/AndroidManifest.xml:28:18-86
+23        android:debuggable="true"
+24        android:extractNativeLibs="false"
+25        android:icon="@mipmap/ic_launcher"
+25-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:9:9-43
+26        android:label="@string/app_name"
+26-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:10:9-41
+27        android:theme="@style/Theme.BorrowTrack" >
+27-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:11:9-49
+28        <activity
+28-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:13:9-21:20
+29            android:name="com.deon.borrowtrack.MainActivity"
+29-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:14:13-41
+30            android:exported="true"
+30-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:15:13-36
+31            android:launchMode="singleTask" >
+31-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:16:13-44
+32            <intent-filter>
+32-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:17:13-20:29
+33                <action android:name="android.intent.action.MAIN" />
+33-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:18:17-69
+33-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:18:25-66
+34
+35                <category android:name="android.intent.category.LAUNCHER" />
+35-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:19:17-77
+35-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:19:27-74
+36            </intent-filter>
+37        </activity>
+38        <activity
+38-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:23:9-74
+39            android:name="com.deon.borrowtrack.AddActivity"
+39-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:23:19-46
+40            android:exported="false" />
+40-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:23:47-71
+41        <activity
+41-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:24:9-77
+42            android:name="com.deon.borrowtrack.DetailActivity"
+42-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:24:19-49
+43            android:exported="false" />
+43-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:24:50-74
+44
+45        <receiver
+45-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:26:9-28:40
+46            android:name="com.deon.borrowtrack.ReminderReceiver"
+46-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:27:13-45
+47            android:exported="false" />
+47-->/home/hatch/workspace/borrowtrack/app/app/src/main/AndroidManifest.xml:28:13-37
+48    </application>
+49
+50</manifest>
