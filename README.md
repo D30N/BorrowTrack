@@ -10,6 +10,12 @@ A simple, private IOU tracker for Android — keep track of what you lent and bo
 
 Built with native Kotlin, no dependencies beyond AndroidX Core.
 
+## Screenshots
+
+| Home | Add entry | Details |
+|------|-----------|---------|
+| ![Home](screenshots/home.png) | ![Add entry](screenshots/add.png) | ![Details](screenshots/detail.png) |
+
 ## Build
 
 ```bash
