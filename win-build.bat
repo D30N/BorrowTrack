@@ -1,5 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
+
+rem Change working directory to the directory where this script resides
+cd /d "%~dp0"
+
 echo =========================================
 echo BorrowTrack Windows Build ^& Run Tool
 echo =========================================
@@ -82,10 +86,10 @@ cd app
 call "%GRADLE_BIN%" assembleDebug %*
 if %errorlevel% neq 0 (
     echo [ERROR] Gradle build failed.
-    cd ..
+    cd "%~dp0"
     exit /b %errorlevel%
 )
-cd ..
+cd "%~dp0"
 
 rem 9. Install and run on connected ADB device if available
 where adb >nul 2>nul

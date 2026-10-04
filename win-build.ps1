@@ -2,6 +2,9 @@
 
 $ErrorActionPreference = "Stop"
 
+# Always change current working directory to script location
+Set-Location $PSScriptRoot
+
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host "BorrowTrack Windows Build & Run Tool" -ForegroundColor Cyan
 Write-Host "=========================================" -ForegroundColor Cyan
@@ -77,7 +80,7 @@ if (-not $gradleBin) {
 Write-Host "[INFO] Building debug APK with Gradle..." -ForegroundColor Green
 Set-Location "app"
 & $gradleBin assembleDebug $args
-Set-Location ".."
+Set-Location $PSScriptRoot
 
 # 9. Install and run on connected ADB device
 $adbCmd = Get-Command adb -ErrorAction SilentlyContinue
