@@ -53,6 +53,8 @@ object Store {
             )
         }
         sp(ctx).edit().putString("entries", arr.toString()).apply()
+        LentWidgetProvider.updateAll(ctx)
+        BorrowedWidgetProvider.updateAll(ctx)
     }
 
     fun add(
@@ -77,6 +79,30 @@ object Store {
             list[i] = list[i].copy(returned = true, returnedMs = System.currentTimeMillis())
             saveAll(ctx, list)
             Remind.cancel(ctx, id)
+        }
+    }
+
+    fun updatePartial(ctx: Context, id: String, returnedAmount: Double) {
+        val list = all(ctx).toMutableList()
+        val i = list.indexOfFirst { it.id == id }
+        if (i < 0) return
+        val e = list[i]
+
+        val numberRegex = Regex("""\d+(\.\d+)?""")
+        val match = numberRegex.find(e.item)
+        if (match != null) {
+            val currentAmount = match.value.toDoubleOrNull() ?: 0.0
+            val remaining = currentAmount - returnedAmount
+            if (remaining <= 0) {
+                markReturned(ctx, id)
+            } else {
+                val remainingStr = if (remaining % 1.0 == 0.0) remaining.toLong().toString() else remaining.toString()
+                val newItem = e.item.replaceFirst(match.value, remainingStr)
+                list[i] = e.copy(item = newItem)
+                saveAll(ctx, list)
+            }
+        } else {
+            markReturned(ctx, id)
         }
     }
 
