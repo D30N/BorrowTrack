@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
@@ -118,27 +119,84 @@ class DetailActivity : Activity() {
             }
             root.addView(remind)
 
-            val done = Ui.tv(this,
-                if (e.isLent) "തിരികെ കിട്ടി ✓" else "തിരികെ കൊടുത്തു ✓",
-                14f, R.color.amber_dark, true
-            ).apply {
+            val doneContainer = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
                 setBackgroundResource(R.drawable.btn_amber)
-                gravity = Gravity.CENTER
-                setPadding(0, Ui.dp(this@DetailActivity, 13), 0, Ui.dp(this@DetailActivity, 13))
+                val p = Ui.dp(this@DetailActivity, 6)
+                setPadding(p, p, p, p)
                 val lp = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
                 )
                 val m = Ui.dp(this@DetailActivity, 16)
                 lp.setMargins(m, 0, m, Ui.dp(this@DetailActivity, 16))
                 layoutParams = lp
-                isClickable = true; isFocusable = true
-                setOnClickListener {
+            }
+
+            val numMatch = Regex("""\d+(\.\d+)?""").find(e.item)
+            val defaultAmt = numMatch?.value ?: e.item
+
+            val amtEt = EditText(this).apply {
+                setText(defaultAmt)
+                setTextColor(Ui.color(this@DetailActivity, R.color.amber_dark))
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+                typeface = android.graphics.Typeface.DEFAULT_BOLD
+                gravity = Gravity.CENTER
+                setBackgroundResource(R.drawable.chip_amber)
+                val px = Ui.dp(this@DetailActivity, 14)
+                val py = Ui.dp(this@DetailActivity, 8)
+                setPadding(px, py, px, py)
+                inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+                isSingleLine = true
+                val lp = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                lp.setMargins(Ui.dp(this@DetailActivity, 2), 0, Ui.dp(this@DetailActivity, 8), 0)
+                layoutParams = lp
+                minWidth = Ui.dp(this@DetailActivity, 70)
+            }
+            doneContainer.addView(amtEt)
+
+            val btnLabel = Ui.tv(
+                this,
+                if (e.isLent) "തിരികെ കിട്ടി ✓" else "തിരികെ കൊടുത്തു ✓",
+                13.5f, R.color.amber_dark, true
+            ).apply {
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+                setPadding(0, Ui.dp(this@DetailActivity, 8), Ui.dp(this@DetailActivity, 12), Ui.dp(this@DetailActivity, 8))
+            }
+            doneContainer.addView(btnLabel)
+
+            val handleReturn = {
+                val enteredStr = amtEt.text.toString().trim()
+                val enteredAmt = enteredStr.toDoubleOrNull()
+                val origAmt = numMatch?.value?.toDoubleOrNull()
+
+                if (enteredAmt != null && origAmt != null && origAmt > 0) {
+                    if (enteredAmt >= origAmt) {
+                        Store.markReturned(this@DetailActivity, e.id)
+                        Toast.makeText(this@DetailActivity, "Done ✓", Toast.LENGTH_SHORT).show()
+                    } else if (enteredAmt <= 0) {
+                        Toast.makeText(this@DetailActivity, "Valid amount എഴുതൂ", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Store.updatePartial(this@DetailActivity, e.id, enteredAmt)
+                        Toast.makeText(this@DetailActivity, "Updated ✓", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
                     Store.markReturned(this@DetailActivity, e.id)
                     Toast.makeText(this@DetailActivity, "Done ✓", Toast.LENGTH_SHORT).show()
-                    finish()
                 }
+                finish()
             }
-            root.addView(done)
+
+            doneContainer.isClickable = true
+            doneContainer.isFocusable = true
+            doneContainer.setOnClickListener { handleReturn() }
+            btnLabel.isClickable = true
+            btnLabel.setOnClickListener { handleReturn() }
+
+            root.addView(doneContainer)
         }
 
         setContentView(root)

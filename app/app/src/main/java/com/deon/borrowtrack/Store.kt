@@ -80,6 +80,30 @@ object Store {
         }
     }
 
+    fun updatePartial(ctx: Context, id: String, returnedAmount: Double) {
+        val list = all(ctx).toMutableList()
+        val i = list.indexOfFirst { it.id == id }
+        if (i < 0) return
+        val e = list[i]
+
+        val numberRegex = Regex("""\d+(\.\d+)?""")
+        val match = numberRegex.find(e.item)
+        if (match != null) {
+            val currentAmount = match.value.toDoubleOrNull() ?: 0.0
+            val remaining = currentAmount - returnedAmount
+            if (remaining <= 0) {
+                markReturned(ctx, id)
+            } else {
+                val remainingStr = if (remaining % 1.0 == 0.0) remaining.toLong().toString() else remaining.toString()
+                val newItem = e.item.replaceFirst(match.value, remainingStr)
+                list[i] = e.copy(item = newItem)
+                saveAll(ctx, list)
+            }
+        } else {
+            markReturned(ctx, id)
+        }
+    }
+
     fun delete(ctx: Context, id: String) {
         saveAll(ctx, all(ctx).filter { it.id != id })
         Remind.cancel(ctx, id)
