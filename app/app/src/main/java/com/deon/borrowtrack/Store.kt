@@ -53,6 +53,8 @@ object Store {
             )
         }
         sp(ctx).edit().putString("entries", arr.toString()).apply()
+        LentWidgetProvider.updateAll(ctx)
+        BorrowedWidgetProvider.updateAll(ctx)
     }
 
     fun add(
