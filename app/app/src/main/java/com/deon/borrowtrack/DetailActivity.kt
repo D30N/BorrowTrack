@@ -174,20 +174,34 @@ class DetailActivity : Activity() {
                 val origAmt = numMatch?.value?.toDoubleOrNull()
 
                 if (enteredAmt != null && origAmt != null && origAmt > 0) {
-                    if (enteredAmt >= origAmt) {
-                        Store.markReturned(this@DetailActivity, e.id)
-                        Toast.makeText(this@DetailActivity, "Done ✓", Toast.LENGTH_SHORT).show()
-                    } else if (enteredAmt <= 0) {
-                        Toast.makeText(this@DetailActivity, "Valid amount എഴുതൂ", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Store.updatePartial(this@DetailActivity, e.id, enteredAmt)
-                        Toast.makeText(this@DetailActivity, "Updated ✓", Toast.LENGTH_SHORT).show()
+                    val maxFormatted = if (origAmt % 1.0 == 0.0) origAmt.toLong().toString() else origAmt.toString()
+                    when {
+                        enteredAmt > origAmt -> {
+                            Toast.makeText(
+                                this@DetailActivity,
+                                "തുക കൂടുതലാണ്! (Max: $maxFormatted)",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        enteredAmt == origAmt -> {
+                            Store.markReturned(this@DetailActivity, e.id)
+                            Toast.makeText(this@DetailActivity, "Done ✓", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        enteredAmt <= 0 -> {
+                            Toast.makeText(this@DetailActivity, "Valid amount എഴുതൂ", Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            Store.updatePartial(this@DetailActivity, e.id, enteredAmt)
+                            Toast.makeText(this@DetailActivity, "Updated ✓", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
                     }
                 } else {
                     Store.markReturned(this@DetailActivity, e.id)
                     Toast.makeText(this@DetailActivity, "Done ✓", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
-                finish()
             }
 
             doneContainer.isClickable = true
