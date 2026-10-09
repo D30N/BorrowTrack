@@ -11,8 +11,8 @@ android {
         applicationId = "com.deon.borrowtrack"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
     }
 
     signingConfigs {
@@ -27,10 +27,16 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            // Shipped signed with the debug key (same as v1.0.0) for direct distribution
+            signingConfig = signingConfigs.getByName("pinnedDebug")
         }
         debug {
             signingConfig = signingConfigs.getByName("pinnedDebug")
         }
+    }
+    lint {
+        // Offline toolchain lacks lint-gradle artifact; skip release lint checks
+        checkReleaseBuilds = false
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
