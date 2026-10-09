@@ -27,5 +27,37 @@
             android:name=".ReminderReceiver"
             android:exported="false" />
 
+        <!-- Lent Items Widget Provider -->
+        <receiver
+            android:name=".LentWidgetProvider"
+            android:exported="true"
+            android:label="BorrowTrack · Lent Items">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/lent_widget_info" />
+        </receiver>
+
+        <!-- Borrowed Items Widget Provider -->
+        <receiver
+            android:name=".BorrowedWidgetProvider"
+            android:exported="true"
+            android:label="BorrowTrack · Borrowed Items">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/borrowed_widget_info" />
+        </receiver>
+
+        <!-- Widget List RemoteViews Service -->
+        <service
+            android:name=".WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+
     </application>
 </manifest>
