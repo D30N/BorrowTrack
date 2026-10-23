@@ -241,7 +241,36 @@ class MainActivity : Activity() {
             })
             return
         }
+        if (tab == "hist") {
+            // Each recorded repayment gets its own History row.
+            val rows = ArrayList<Pair<Long, LinearLayout>>()
+            for (e in list) {
+                if (e.payments.isEmpty()) {
+                    rows.add(e.returnedMs to card(e))
+                } else {
+                    for (p in e.payments) rows.add(p.ms to payCard(e, p))
+                }
+            }
+            rows.sortByDescending { it.first }
+            for ((_, v) in rows) listBox.addView(v)
+            return
+        }
         for (e in list) listBox.addView(card(e))
+    }
+
+    private fun payCard(e: Entry, p: Payment): LinearLayout {
+        val c = Ui.card(this)
+        val verb = if (e.isLent) L.histGot(this) else L.histPaid(this)
+        c.addView(Ui.tv(this, Store.fmtAmt(p.amount), 13.5f, R.color.white, true))
+        c.addView(Ui.tv(
+            this, "$verb · ${e.person} · ${Store.fmtDate(p.ms)}", 11.5f, R.color.grey
+        ).apply {
+            setPadding(0, Ui.dp(this@MainActivity, 4), 0, 0)
+        })
+        c.setOnClickListener {
+            startActivity(Intent(this, DetailActivity::class.java).putExtra("id", e.id))
+        }
+        return c
     }
 
     private fun emptyHint(): String = when (tab) {

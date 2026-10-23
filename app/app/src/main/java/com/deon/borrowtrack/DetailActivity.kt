@@ -100,6 +100,12 @@ class DetailActivity : Activity() {
             b.addView(flabel("Status"))
             b.addView(fval(L.returnedVal(this, Store.fmtDate(e.returnedMs))))
         }
+        if (e.payments.isNotEmpty()) {
+            b.addView(flabel(L.paymentsTitle(this)))
+            for (p in e.payments.sortedByDescending { it.ms }) {
+                b.addView(fval("${Store.fmtAmt(p.amount)} · ${Store.fmtDate(p.ms)}"))
+            }
+        }
         sv.addView(b)
         root.addView(sv)
 

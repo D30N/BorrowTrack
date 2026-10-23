@@ -1,5 +1,8 @@
 package com.deon.borrowtrack
 
+/** One partial repayment: amount + when it happened. */
+data class Payment(val amount: Double, val ms: Long)
+
 /** type: "lent" (I gave) or "borrowed" (I took) */
 data class Entry(
     val id: String,
@@ -10,7 +13,8 @@ data class Entry(
     val dueMs: Long,
     val note: String,
     val returned: Boolean,
-    val returnedMs: Long
+    val returnedMs: Long,
+    val payments: List<Payment> = emptyList()
 ) {
     val isLent: Boolean get() = type == "lent"
 

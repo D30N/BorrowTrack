@@ -18,6 +18,14 @@ object Store {
             val arr = JSONArray(raw)
             for (i in 0 until arr.length()) {
                 val o = arr.getJSONObject(i)
+                val pays = ArrayList<Payment>()
+                val pa = o.optJSONArray("payments")
+                if (pa != null) {
+                    for (j in 0 until pa.length()) {
+                        val po = pa.getJSONObject(j)
+                        pays.add(Payment(po.optDouble("a"), po.optLong("t")))
+                    }
+                }
                 out.add(
                     Entry(
                         id = o.optString("id"),
@@ -28,7 +36,8 @@ object Store {
                         dueMs = o.optLong("dueMs"),
                         note = o.optString("note"),
                         returned = o.optBoolean("returned"),
-                        returnedMs = o.optLong("returnedMs")
+                        returnedMs = o.optLong("returnedMs"),
+                        payments = pays
                     )
                 )
             }
@@ -43,6 +52,10 @@ object Store {
     private fun saveAll(ctx: Context, list: List<Entry>) {
         val arr = JSONArray()
         for (e in list) {
+            val pa = JSONArray()
+            for (p in e.payments) {
+                pa.put(JSONObject().put("a", p.amount).put("t", p.ms))
+            }
             arr.put(
                 JSONObject()
                     .put("id", e.id).put("type", e.type)
@@ -50,6 +63,7 @@ object Store {
                     .put("dateMs", e.dateMs).put("dueMs", e.dueMs)
                     .put("note", e.note).put("returned", e.returned)
                     .put("returnedMs", e.returnedMs)
+                    .put("payments", pa)
             )
         }
         sp(ctx).edit().putString("entries", arr.toString()).apply()
@@ -76,7 +90,17 @@ object Store {
         val list = all(ctx).toMutableList()
         val i = list.indexOfFirst { it.id == id }
         if (i >= 0) {
-            list[i] = list[i].copy(returned = true, returnedMs = System.currentTimeMillis())
+            val now = System.currentTimeMillis()
+            var e = list[i].copy(returned = true, returnedMs = now)
+            // Closing a loan that already has partial payments: record the
+            // final chunk too, so the payment history adds up.
+            if (e.payments.isNotEmpty()) {
+                val rem = Regex("""\d+(\.\d+)?""").find(e.item)?.value?.toDoubleOrNull()
+                if (rem != null && rem > 0) {
+                    e = e.copy(payments = e.payments + Payment(rem, now))
+                }
+            }
+            list[i] = e
             saveAll(ctx, list)
             Remind.cancel(ctx, id)
         }
@@ -88,23 +112,29 @@ object Store {
         if (i < 0) return
         val e = list[i]
 
-        val numberRegex = Regex("""\d+(\.\d+)?""")
-        val match = numberRegex.find(e.item)
-        if (match != null) {
-            val currentAmount = match.value.toDoubleOrNull() ?: 0.0
-            val remaining = currentAmount - returnedAmount
-            if (remaining <= 0) {
-                markReturned(ctx, id)
-            } else {
-                val remainingStr = if (remaining % 1.0 == 0.0) remaining.toLong().toString() else remaining.toString()
-                val newItem = e.item.replaceFirst(match.value, remainingStr)
-                list[i] = e.copy(item = newItem)
-                saveAll(ctx, list)
-            }
-        } else {
+        val match = Regex("""\d+(\.\d+)?""").find(e.item)
+        if (match == null) {
             markReturned(ctx, id)
+            return
+        }
+        val currentAmount = match.value.toDoubleOrNull() ?: 0.0
+        val remaining = currentAmount - returnedAmount
+        val now = System.currentTimeMillis()
+        val newPayments = e.payments + Payment(returnedAmount, now)
+        if (remaining <= 0) {
+            list[i] = e.copy(returned = true, returnedMs = now, payments = newPayments)
+            saveAll(ctx, list)
+            Remind.cancel(ctx, id)
+        } else {
+            val remainingStr = if (remaining % 1.0 == 0.0) remaining.toLong().toString() else remaining.toString()
+            val newItem = e.item.replaceFirst(match.value, remainingStr)
+            list[i] = e.copy(item = newItem, payments = newPayments)
+            saveAll(ctx, list)
         }
     }
+
+    fun fmtAmt(a: Double): String =
+        if (a % 1.0 == 0.0) "₹${a.toLong()}" else "₹$a"
 
     fun delete(ctx: Context, id: String) {
         saveAll(ctx, all(ctx).filter { it.id != id })
