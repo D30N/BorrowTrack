@@ -90,6 +90,22 @@ class MainActivity : Activity() {
         }
         statLent = statCard(L.statLent(this))
         statBorrowed = statCard(L.statBorrowed(this))
+        // The top "To get back / To give back" cards act as buttons too:
+        // tapping one jumps straight to that list.
+        statLent.apply {
+            isClickable = true; isFocusable = true
+            setOnClickListener {
+                seg = "lent"
+                if (tab != "home") showTab("home") else render()
+            }
+        }
+        statBorrowed.apply {
+            isClickable = true; isFocusable = true
+            setOnClickListener {
+                seg = "borrowed"
+                if (tab != "home") showTab("home") else render()
+            }
+        }
         sum.addView(statLent)
         val sp = Space(this).apply {
             layoutParams = LinearLayout.LayoutParams(Ui.dp(this@MainActivity, 10), 1)

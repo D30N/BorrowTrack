@@ -11,8 +11,8 @@ android {
         applicationId = "com.deon.borrowtrack"
         minSdk = 26
         targetSdk = 34
-        versionCode = 9
-        versionName = "1.3.1"
+        versionCode = 10
+        versionName = "1.3.2"
     }
 
     signingConfigs {
