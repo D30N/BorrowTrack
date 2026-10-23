@@ -75,7 +75,9 @@ class MainActivity : Activity() {
         val fab = Ui.plusButton(
             this, 38, Theme.accentBg(this), Ui.color(this, R.color.amber_dark)
         ) {
-            startActivity(Intent(this@MainActivity, AddActivity::class.java))
+            startActivity(
+                Intent(this@MainActivity, AddActivity::class.java).putExtra("type", seg)
+            )
         }
         bar.addView(fab)
         root.addView(bar)
@@ -226,7 +228,9 @@ class MainActivity : Activity() {
                 val big = Ui.plusButton(
                     this, 84, Theme.circleAccentBg(this), Ui.color(this, R.color.amber_dark)
                 ) {
-                    startActivity(Intent(this@MainActivity, AddActivity::class.java))
+                    startActivity(
+                        Intent(this@MainActivity, AddActivity::class.java).putExtra("type", seg)
+                    )
                 }
                 val s = Ui.dp(this, 84)
                 big.layoutParams = LinearLayout.LayoutParams(s, s).apply {

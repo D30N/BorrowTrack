@@ -25,6 +25,9 @@ class AddActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Open on the tab the user came from: "+" while "Borrowed" is
+        // selected on Home starts a Borrowed entry, not a Lent one.
+        isLent = intent.getStringExtra("type") != "borrowed"
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Ui.color(this@AddActivity, R.color.bg))
@@ -63,8 +66,8 @@ class AddActivity : Activity() {
             setPadding(Ui.dp(this@AddActivity, 3), Ui.dp(this@AddActivity, 3),
                 Ui.dp(this@AddActivity, 3), Ui.dp(this@AddActivity, 3))
         }
-        togA = togBtn(L.iLent(this), true) { isLent = true; paintTog() }
-        togB = togBtn(L.iBorrowed(this), false) { isLent = false; paintTog() }
+        togA = togBtn(L.iLent(this), isLent) { isLent = true; paintTog() }
+        togB = togBtn(L.iBorrowed(this), !isLent) { isLent = false; paintTog() }
         tog.addView(togA); tog.addView(togB)
         f.addView(tog)
         paintTog()

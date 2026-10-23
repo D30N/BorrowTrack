@@ -144,8 +144,10 @@ class DetailActivity : Activity() {
 
             val amtEt = EditText(this).apply {
                 setText(defaultAmt)
-                setTextColor(Ui.color(this@DetailActivity, R.color.amber_dark))
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+                // Dark text on the pale chip — accent "on" colour is white and
+                // was invisible here (white on light pink).
+                setTextColor(Ui.color(this@DetailActivity, R.color.white))
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 17f)
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
                 gravity = Gravity.CENTER
                 background = Theme.chipBg(this@DetailActivity)
