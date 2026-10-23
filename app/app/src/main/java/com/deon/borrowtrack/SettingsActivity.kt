@@ -29,7 +29,7 @@ class SettingsActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             val p = Ui.dp(this@SettingsActivity, 14)
-            setPadding(p, Ui.dp(this@SettingsActivity, 10), p, Ui.dp(this@SettingsActivity, 8))
+            setPadding(p, Ui.dp(this@SettingsActivity, 18), p, Ui.dp(this@SettingsActivity, 12))
         }
         val back = Ui.tv(this, "‹", 26f, R.color.white).apply {
             setPadding(0, 0, Ui.dp(this@SettingsActivity, 12), 0)
@@ -37,7 +37,7 @@ class SettingsActivity : Activity() {
             setOnClickListener { finish() }
         }
         bar.addView(back)
-        bar.addView(Ui.tv(this, "Settings", 20f, R.color.white, true))
+        bar.addView(Ui.tv(this, "Settings", 22f, R.color.white, true))
         root.addView(bar)
 
         val sv = ScrollView(this).apply {
@@ -116,8 +116,8 @@ class SettingsActivity : Activity() {
     }
 
     private fun sectionTitle(s: String): TextView =
-        Ui.tv(this, s, 13f, R.color.grey, true).apply {
-            setPadding(0, Ui.dp(this@SettingsActivity, 20), 0, Ui.dp(this@SettingsActivity, 8))
+        Ui.tv(this, s, 14f, R.color.grey, true).apply {
+            setPadding(0, Ui.dp(this@SettingsActivity, 22), 0, Ui.dp(this@SettingsActivity, 10))
         }
 
     private fun settingsCard(): LinearLayout {
@@ -138,17 +138,24 @@ class SettingsActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             setPadding(
-                Ui.dp(this@SettingsActivity, 8), Ui.dp(this@SettingsActivity, 14),
-                Ui.dp(this@SettingsActivity, 8), Ui.dp(this@SettingsActivity, 14)
+                Ui.dp(this@SettingsActivity, 8), Ui.dp(this@SettingsActivity, 16),
+                Ui.dp(this@SettingsActivity, 8), Ui.dp(this@SettingsActivity, 16)
             )
             isClickable = true; isFocusable = true
             setOnClickListener { onClick() }
         }
-        row.addView(Ui.tv(this, if (checked) "◉" else "○", 20f,
-            if (checked) R.color.amber else R.color.grey2).apply {
-            setPadding(0, 0, Ui.dp(this@SettingsActivity, 12), 0)
-        })
-        row.addView(Ui.tv(this, label, 16f, R.color.white, checked))
+        val radio = View(this).apply {
+            val s = Ui.dp(this@SettingsActivity, 26)
+            layoutParams = LinearLayout.LayoutParams(s, s).apply {
+                marginEnd = Ui.dp(this@SettingsActivity, 14)
+            }
+            background = RadioDrawable(
+                checked,
+                Ui.color(this@SettingsActivity, if (checked) R.color.amber else R.color.grey2)
+            )
+        }
+        row.addView(radio)
+        row.addView(Ui.tv(this, label, 17f, R.color.white, checked))
         return row
     }
 

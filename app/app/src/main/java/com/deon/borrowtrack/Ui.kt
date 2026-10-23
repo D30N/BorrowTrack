@@ -104,9 +104,9 @@ object Ui {
         val ic = ImageView(c)
         ic.setImageResource(iconRes)
         ic.setColorFilter(color(c, if (on) R.color.amber else R.color.grey2))
-        val isz = dp(c, 24)
+        val isz = dp(c, 26)
         ic.layoutParams = LinearLayout.LayoutParams(isz, isz)
-        val lb = tv(c, label, 11f, if (on) R.color.amber else R.color.grey2, on)
+        val lb = tv(c, label, 12f, if (on) R.color.amber else R.color.grey2, on)
         lb.gravity = Gravity.CENTER
         lb.setPadding(0, dp(c, 3), 0, 0)
         l.addView(ic)
@@ -163,6 +163,36 @@ class PlusDrawable(private val fg: Int) : Drawable() {
 
     override fun setColorFilter(cf: ColorFilter?) {
         p.colorFilter = cf
+    }
+
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+}
+
+/** A radio circle drawn at full size — ring plus centre dot when checked. */
+class RadioDrawable(private val checked: Boolean, private val fg: Int) : Drawable() {
+    private val ring = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE }
+    private val dot = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
+
+    override fun draw(canvas: Canvas) {
+        val b = bounds
+        val m = Math.min(b.width(), b.height()).toFloat()
+        ring.color = fg
+        ring.strokeWidth = m * 0.09f
+        dot.color = fg
+        val cx = b.exactCenterX()
+        val cy = b.exactCenterY()
+        canvas.drawCircle(cx, cy, m * 0.40f, ring)
+        if (checked) canvas.drawCircle(cx, cy, m * 0.21f, dot)
+    }
+
+    override fun setAlpha(alpha: Int) {
+        ring.alpha = alpha
+        dot.alpha = alpha
+    }
+
+    override fun setColorFilter(cf: ColorFilter?) {
+        ring.colorFilter = cf
+        dot.colorFilter = cf
     }
 
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT

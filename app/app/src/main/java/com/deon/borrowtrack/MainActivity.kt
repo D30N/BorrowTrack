@@ -61,9 +61,9 @@ class MainActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             val p = Ui.dp(this@MainActivity, 14)
-            setPadding(p, Ui.dp(this@MainActivity, 10), p, Ui.dp(this@MainActivity, 8))
+            setPadding(p, Ui.dp(this@MainActivity, 16), p, Ui.dp(this@MainActivity, 10))
         }
-        val logo = Ui.tv(this, "BorrowTrack", 18f, R.color.white, true)
+        val logo = Ui.tv(this, "BorrowTrack", 20f, R.color.white, true)
         val full = android.text.SpannableString("BorrowTrack")
         full.setSpan(
             android.text.style.ForegroundColorSpan(Ui.color(this, R.color.amber)),
@@ -111,7 +111,7 @@ class MainActivity : Activity() {
         }
         root.addView(segRow)
 
-        titleTv = Ui.tv(this, "", 12f, R.color.grey, true).apply {
+        titleTv = Ui.tv(this, "", 13.5f, R.color.grey, true).apply {
             val m = Ui.dp(this@MainActivity, 14)
             setPadding(m, Ui.dp(this@MainActivity, 2), 0, Ui.dp(this@MainActivity, 6))
         }
@@ -169,8 +169,8 @@ class MainActivity : Activity() {
             val p = Ui.dp(this@MainActivity, 12)
             setPadding(p, Ui.dp(this@MainActivity, 10), p, Ui.dp(this@MainActivity, 10))
         }
-        val n = Ui.tv(this, "0", 20f, R.color.amber, true)
-        val lb = Ui.tv(this, label, 10.5f, R.color.grey)
+        val n = Ui.tv(this, "0", 22f, R.color.amber, true)
+        val lb = Ui.tv(this, label, 12f, R.color.grey)
         l.addView(n); l.addView(lb)
         l.setTag(n)
         return l
@@ -235,7 +235,7 @@ class MainActivity : Activity() {
                 }
                 listBox.addView(big)
             }
-            listBox.addView(Ui.tv(this, emptyHint(), 12f, R.color.grey2).apply {
+            listBox.addView(Ui.tv(this, emptyHint(), 13.5f, R.color.grey2).apply {
                 gravity = Gravity.CENTER
                 setPadding(0, Ui.dp(this@MainActivity, 16), 0, 0)
             })
@@ -252,7 +252,7 @@ class MainActivity : Activity() {
 
     private fun renderSeg() {
         segRow.removeAllViews()
-        val a = Ui.tv(this, L.segLent(this), 12f,
+        val a = Ui.tv(this, L.segLent(this), 13.5f,
             if (seg == "lent") R.color.amber_dark else R.color.grey, seg == "lent").apply {
             background = if (seg == "lent") Theme.accentBg(this@MainActivity) else null
             gravity = Gravity.CENTER
@@ -261,7 +261,7 @@ class MainActivity : Activity() {
             isClickable = true; isFocusable = true
             setOnClickListener { seg = "lent"; render() }
         }
-        val b = Ui.tv(this, L.segBorrowed(this), 12f,
+        val b = Ui.tv(this, L.segBorrowed(this), 13.5f,
             if (seg == "borrowed") R.color.amber_dark else R.color.grey, seg == "borrowed").apply {
             background = if (seg == "borrowed") Theme.accentBg(this@MainActivity) else null
             gravity = Gravity.CENTER
