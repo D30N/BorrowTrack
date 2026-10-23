@@ -43,7 +43,7 @@ class WidgetItemFactory(
 
         val views = RemoteViews(context.packageName, R.layout.widget_item_row)
         views.setTextViewText(R.id.item_title, e.item)
-        views.setTextViewText(R.id.item_subtitle, Ui.subLine(e))
+        views.setTextViewText(R.id.item_subtitle, Ui.subLine(context, e))
 
         val (statusText, _) = Ui.statusOf(e)
         views.setTextViewText(R.id.item_status, statusText)

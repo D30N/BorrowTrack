@@ -37,7 +37,7 @@ class SettingsActivity : Activity() {
             setOnClickListener { finish() }
         }
         bar.addView(back)
-        bar.addView(Ui.tv(this, "Settings", 16f, R.color.white, true))
+        bar.addView(Ui.tv(this, "Settings", 20f, R.color.white, true))
         root.addView(bar)
 
         val sv = ScrollView(this).apply {
@@ -80,7 +80,7 @@ class SettingsActivity : Activity() {
             })
         }
         card2.addView(swRow)
-        card2.addView(Ui.tv(this, Theme.accent(this).label, 12f, R.color.grey).apply {
+        card2.addView(Ui.tv(this, Theme.accent(this).label, 14f, R.color.grey).apply {
             gravity = Gravity.CENTER
             setPadding(0, Ui.dp(this@SettingsActivity, 2), 0, Ui.dp(this@SettingsActivity, 6))
         })
@@ -99,7 +99,7 @@ class SettingsActivity : Activity() {
         b.addView(card3)
 
         // Credit
-        b.addView(Ui.tv(this, "This app was made by Deon", 11f, R.color.amber).apply {
+        b.addView(Ui.tv(this, "This app was made by Deon", 13f, R.color.amber).apply {
             paintFlags = paintFlags or android.graphics.Paint.UNDERLINE_TEXT_FLAG
             gravity = Gravity.CENTER
             setPadding(0, Ui.dp(this@SettingsActivity, 18), 0, 0)
@@ -116,8 +116,8 @@ class SettingsActivity : Activity() {
     }
 
     private fun sectionTitle(s: String): TextView =
-        Ui.tv(this, s, 11f, R.color.grey, true).apply {
-            setPadding(0, Ui.dp(this@SettingsActivity, 16), 0, Ui.dp(this@SettingsActivity, 6))
+        Ui.tv(this, s, 13f, R.color.grey, true).apply {
+            setPadding(0, Ui.dp(this@SettingsActivity, 20), 0, Ui.dp(this@SettingsActivity, 8))
         }
 
     private fun settingsCard(): LinearLayout {
@@ -138,24 +138,24 @@ class SettingsActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             setPadding(
-                Ui.dp(this@SettingsActivity, 6), Ui.dp(this@SettingsActivity, 10),
-                Ui.dp(this@SettingsActivity, 6), Ui.dp(this@SettingsActivity, 10)
+                Ui.dp(this@SettingsActivity, 8), Ui.dp(this@SettingsActivity, 14),
+                Ui.dp(this@SettingsActivity, 8), Ui.dp(this@SettingsActivity, 14)
             )
             isClickable = true; isFocusable = true
             setOnClickListener { onClick() }
         }
-        row.addView(Ui.tv(this, if (checked) "◉" else "○", 16f,
+        row.addView(Ui.tv(this, if (checked) "◉" else "○", 20f,
             if (checked) R.color.amber else R.color.grey2).apply {
-            setPadding(0, 0, Ui.dp(this@SettingsActivity, 10), 0)
+            setPadding(0, 0, Ui.dp(this@SettingsActivity, 12), 0)
         })
-        row.addView(Ui.tv(this, label, 13.5f, R.color.white, checked))
+        row.addView(Ui.tv(this, label, 16f, R.color.white, checked))
         return row
     }
 
     private fun swatch(selected: Boolean, color: Int, onClick: () -> Unit): View {
         val wrap = LinearLayout(this).apply {
             gravity = Gravity.CENTER
-            val s = Ui.dp(this@SettingsActivity, 48)
+            val s = Ui.dp(this@SettingsActivity, 56)
             layoutParams = LinearLayout.LayoutParams(s, s)
             isClickable = true; isFocusable = true
             setOnClickListener { onClick() }
@@ -172,7 +172,7 @@ class SettingsActivity : Activity() {
             g.shape = GradientDrawable.OVAL
             g.setColor(color)
             background = g
-            val s = Ui.dp(this@SettingsActivity, 34)
+            val s = Ui.dp(this@SettingsActivity, 40)
             layoutParams = LinearLayout.LayoutParams(s, s)
         }
         wrap.addView(dot)

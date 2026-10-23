@@ -1,10 +1,18 @@
 package com.deon.borrowtrack
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.ColorFilter
+import android.graphics.Paint
+import android.graphics.PixelFormat
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.TextView
@@ -84,7 +92,7 @@ object Ui {
     }
 
     fun tabBtn(
-        c: Context, icon: String, label: String, on: Boolean, onClick: () -> Unit
+        c: Context, iconRes: Int, label: String, on: Boolean, onClick: () -> Unit
     ): LinearLayout {
         val l = LinearLayout(c)
         l.orientation = LinearLayout.VERTICAL
@@ -93,17 +101,69 @@ object Ui {
         l.setPadding(0, dp(c, 7), 0, dp(c, 10))
         l.isClickable = true
         l.isFocusable = true
-        val ic = tv(c, icon, 17f, if (on) R.color.amber else R.color.grey2)
-        ic.gravity = Gravity.CENTER
-        val lb = tv(c, label, 10f, if (on) R.color.amber else R.color.grey2, on)
+        val ic = ImageView(c)
+        ic.setImageResource(iconRes)
+        ic.setColorFilter(color(c, if (on) R.color.amber else R.color.grey2))
+        val isz = dp(c, 24)
+        ic.layoutParams = LinearLayout.LayoutParams(isz, isz)
+        val lb = tv(c, label, 11f, if (on) R.color.amber else R.color.grey2, on)
         lb.gravity = Gravity.CENTER
-        lb.setPadding(0, dp(c, 2), 0, 0)
+        lb.setPadding(0, dp(c, 3), 0, 0)
         l.addView(ic)
         l.addView(lb)
         l.setOnClickListener { onClick() }
         return l
     }
 
+    /** A button whose + is drawn geometrically — always dead centre. */
+    fun plusButton(
+        c: Context, sizeDp: Int, bg: Drawable?, fg: Int, onClick: () -> Unit
+    ): FrameLayout {
+        val f = FrameLayout(c)
+        f.background = bg
+        val s = dp(c, sizeDp)
+        f.layoutParams = LinearLayout.LayoutParams(s, s)
+        val icon = View(c)
+        val isz = dp(c, (sizeDp * 0.42f).toInt().coerceAtLeast(14))
+        icon.layoutParams = FrameLayout.LayoutParams(isz, isz, Gravity.CENTER)
+        icon.background = PlusDrawable(fg)
+        f.addView(icon)
+        f.isClickable = true
+        f.isFocusable = true
+        f.setOnClickListener { onClick() }
+        return f
+    }
+
     fun spacer(c: Context): Space =
         Space(c).apply { layoutParams = LinearLayout.LayoutParams(0, 1, 1f) }
+}
+
+/** Draws a + with two centred strokes — immune to font-metric drift. */
+class PlusDrawable(private val fg: Int) : Drawable() {
+    private val p = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeCap = Paint.Cap.ROUND
+    }
+
+    override fun draw(canvas: Canvas) {
+        val b = bounds
+        val m = Math.min(b.width(), b.height()).toFloat()
+        p.color = fg
+        p.strokeWidth = m * 0.18f
+        val arm = m * 0.32f
+        val cx = b.exactCenterX()
+        val cy = b.exactCenterY()
+        canvas.drawLine(cx - arm, cy, cx + arm, cy, p)
+        canvas.drawLine(cx, cy - arm, cx, cy + arm, p)
+    }
+
+    override fun setAlpha(alpha: Int) {
+        p.alpha = alpha
+    }
+
+    override fun setColorFilter(cf: ColorFilter?) {
+        p.colorFilter = cf
+    }
+
+    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 }

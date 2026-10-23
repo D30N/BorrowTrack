@@ -72,15 +72,10 @@ class MainActivity : Activity() {
         logo.text = full
         bar.addView(logo)
         bar.addView(Ui.spacer(this))
-        val fab = Ui.tv(this, "+", 22f, R.color.amber_dark, true).apply {
-            background = Theme.accentBg(this@MainActivity)
-            gravity = Gravity.CENTER
-            val s = Ui.dp(this@MainActivity, 38)
-            layoutParams = LinearLayout.LayoutParams(s, s)
-            isClickable = true; isFocusable = true
-            setOnClickListener {
-                startActivity(Intent(this@MainActivity, AddActivity::class.java))
-            }
+        val fab = Ui.plusButton(
+            this, 38, Theme.accentBg(this), Ui.color(this, R.color.amber_dark)
+        ) {
+            startActivity(Intent(this@MainActivity, AddActivity::class.java))
         }
         bar.addView(fab)
         root.addView(bar)
@@ -133,7 +128,7 @@ class MainActivity : Activity() {
         sv.addView(listBox)
         root.addView(sv)
 
-        // Footer: credit (tap = website) + settings gear
+        // Footer: credit line (tap = website). Settings lives in the bottom nav.
         val footer = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -155,18 +150,6 @@ class MainActivity : Activity() {
             }
         }
         footer.addView(credit)
-        val gear = Ui.tv(this, "⚙", 17f, R.color.grey).apply {
-            gravity = Gravity.CENTER
-            setPadding(
-                Ui.dp(this@MainActivity, 10), Ui.dp(this@MainActivity, 6),
-                Ui.dp(this@MainActivity, 14), Ui.dp(this@MainActivity, 6)
-            )
-            isClickable = true; isFocusable = true
-            setOnClickListener {
-                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
-            }
-        }
-        footer.addView(gear)
         root.addView(footer)
 
         // Bottom nav
@@ -200,9 +183,12 @@ class MainActivity : Activity() {
     private fun showTab(t: String) {
         tab = t
         navBar.removeAllViews()
-        navBar.addView(Ui.tabBtn(this, "🏠", "Home", t == "home") { showTab("home") })
-        navBar.addView(Ui.tabBtn(this, "🔔", "Reminders", t == "rem") { showTab("rem") })
-        navBar.addView(Ui.tabBtn(this, "📜", "History", t == "hist") { showTab("hist") })
+        navBar.addView(Ui.tabBtn(this, R.drawable.ic_home, "Home", t == "home") { showTab("home") })
+        navBar.addView(Ui.tabBtn(this, R.drawable.ic_bell, "Reminders", t == "rem") { showTab("rem") })
+        navBar.addView(Ui.tabBtn(this, R.drawable.ic_history, "History", t == "hist") { showTab("hist") })
+        navBar.addView(Ui.tabBtn(this, R.drawable.ic_settings, "Settings", false) {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        })
         render()
     }
 
@@ -237,18 +223,15 @@ class MainActivity : Activity() {
         if (list.isEmpty()) {
             if (tab == "home") {
                 // Big centred + — the small top + is easy to miss
-                val big = Ui.tv(this, "+", 40f, R.color.amber_dark, true).apply {
-                    background = Theme.circleAccentBg(this@MainActivity)
-                    gravity = Gravity.CENTER
-                    val s = Ui.dp(this@MainActivity, 84)
-                    layoutParams = LinearLayout.LayoutParams(s, s).apply {
-                        gravity = Gravity.CENTER_HORIZONTAL
-                        topMargin = Ui.dp(this@MainActivity, 70)
-                    }
-                    isClickable = true; isFocusable = true
-                    setOnClickListener {
-                        startActivity(Intent(this@MainActivity, AddActivity::class.java))
-                    }
+                val big = Ui.plusButton(
+                    this, 84, Theme.circleAccentBg(this), Ui.color(this, R.color.amber_dark)
+                ) {
+                    startActivity(Intent(this@MainActivity, AddActivity::class.java))
+                }
+                val s = Ui.dp(this, 84)
+                big.layoutParams = LinearLayout.LayoutParams(s, s).apply {
+                    gravity = Gravity.CENTER_HORIZONTAL
+                    topMargin = Ui.dp(this@MainActivity, 70)
                 }
                 listBox.addView(big)
             }
