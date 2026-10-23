@@ -84,28 +84,28 @@ class DetailActivity : Activity() {
             setPadding(0, Ui.dp(this@DetailActivity, 8), 0, Ui.dp(this@DetailActivity, 2))
         })
         b.addView(Ui.tv(this,
-            if (e.isLent) "${e.person}-ക്ക് കൊടുത്തത്" else "${e.person}-ൽ നിന്ന് വാങ്ങിയത്",
+            if (e.isLent) L.givenTo(this, e.person) else L.takenFrom(this, e.person),
             13f, R.color.grey
         ))
 
-        b.addView(flabel("തീയതി"))
+        b.addView(flabel(L.dateL(this)))
         b.addView(fval(Store.fmtDate(e.dateMs)))
-        b.addView(flabel(if (e.isLent) "തിരികെ വേണ്ട തീയതി" else "തിരികെ കൊടുക്കേണ്ട തീയതി"))
+        b.addView(flabel(if (e.isLent) L.dueLent(this) else L.dueBorrowed(this)))
         b.addView(fval(Store.fmtDate(e.dueMs)))
         if (e.note.isNotBlank()) {
-            b.addView(flabel("കുറിപ്പ്"))
+            b.addView(flabel(L.noteL(this)))
             b.addView(fval(e.note))
         }
         if (e.returned) {
             b.addView(flabel("Status"))
-            b.addView(fval("തിരികെ കിട്ടി · ${Store.fmtDate(e.returnedMs)}"))
+            b.addView(fval(L.returnedVal(this, Store.fmtDate(e.returnedMs))))
         }
         sv.addView(b)
         root.addView(sv)
 
         if (!e.returned) {
             val remind = Ui.tv(this, "Remind", 13f, R.color.white, true).apply {
-                setBackgroundResource(R.drawable.field)
+                background = Theme.fieldBg(this@DetailActivity)
                 gravity = Gravity.CENTER
                 setPadding(0, Ui.dp(this@DetailActivity, 12), 0, Ui.dp(this@DetailActivity, 12))
                 val lp = LinearLayout.LayoutParams(
@@ -122,7 +122,7 @@ class DetailActivity : Activity() {
             val doneContainer = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
-                setBackgroundResource(R.drawable.btn_amber)
+                background = Theme.accentBg(this@DetailActivity)
                 val p = Ui.dp(this@DetailActivity, 6)
                 setPadding(p, p, p, p)
                 val lp = LinearLayout.LayoutParams(
@@ -142,7 +142,7 @@ class DetailActivity : Activity() {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
                 gravity = Gravity.CENTER
-                setBackgroundResource(R.drawable.chip_amber)
+                background = Theme.chipBg(this@DetailActivity)
                 val px = Ui.dp(this@DetailActivity, 14)
                 val py = Ui.dp(this@DetailActivity, 8)
                 setPadding(px, py, px, py)
@@ -159,7 +159,7 @@ class DetailActivity : Activity() {
 
             val btnLabel = Ui.tv(
                 this,
-                if (e.isLent) "തിരികെ കിട്ടി ✓" else "തിരികെ കൊടുത്തു ✓",
+                if (e.isLent) L.gotIt(this) else L.gaveBack(this),
                 13.5f, R.color.amber_dark, true
             ).apply {
                 gravity = Gravity.CENTER
@@ -179,7 +179,7 @@ class DetailActivity : Activity() {
                         enteredAmt > origAmt -> {
                             Toast.makeText(
                                 this@DetailActivity,
-                                "തുക കൂടുതലാണ്! (Max: $maxFormatted)",
+                                L.tooMuch(this@DetailActivity, maxFormatted),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -189,7 +189,7 @@ class DetailActivity : Activity() {
                             finish()
                         }
                         enteredAmt <= 0 -> {
-                            Toast.makeText(this@DetailActivity, "Valid amount എഴുതൂ", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@DetailActivity, L.validAmt(this@DetailActivity), Toast.LENGTH_SHORT).show()
                         }
                         else -> {
                             Store.updatePartial(this@DetailActivity, e.id, enteredAmt)
@@ -223,16 +223,16 @@ class DetailActivity : Activity() {
 
     private fun fval(s: String): TextView =
         Ui.tv(this, s, 13f, R.color.white).apply {
-            setBackgroundResource(R.drawable.field)
+            background = Theme.fieldBg(this@DetailActivity)
             val p = Ui.dp(this@DetailActivity, 12)
             setPadding(p, Ui.dp(this@DetailActivity, 11), p, Ui.dp(this@DetailActivity, 11))
         }
 
     private fun remind(e: Entry) {
         val text = if (e.isLent)
-            "Hi ${e.person}! ${e.item} തിരികെ തരാമോ? 🙂"
+            L.remindLent(this, e.person, e.item)
         else
-            "Hi ${e.person}! ${e.item} തിരികെ തരാം 👍"
+            L.remindBorrowed(this, e.person, e.item)
         val wa = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, text)

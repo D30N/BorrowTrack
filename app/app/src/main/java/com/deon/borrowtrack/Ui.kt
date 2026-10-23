@@ -15,8 +15,7 @@ object Ui {
             TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), c.resources.displayMetrics
         ).toInt()
 
-    fun color(c: Context, id: Int): Int =
-        androidx.core.content.ContextCompat.getColor(c, id)
+    fun color(c: Context, id: Int): Int = Theme.colorFor(c, id)
 
     fun tv(c: Context, text: String, sizeSp: Float, colorId: Int, bold: Boolean = false): TextView {
         val t = TextView(c)
@@ -30,7 +29,7 @@ object Ui {
     fun card(c: Context): LinearLayout {
         val l = LinearLayout(c)
         l.orientation = LinearLayout.VERTICAL
-        l.setBackgroundResource(R.drawable.card)
+        l.background = Theme.cardBg(c)
         val p = dp(c, 12)
         l.setPadding(p, dp(c, 10), p, dp(c, 10))
         val lp = LinearLayout.LayoutParams(
@@ -62,20 +61,24 @@ object Ui {
         }
     }
 
-    fun subLine(e: Entry): String {
+    fun subLine(c: Context, e: Entry): String {
+        val en = Theme.lang(c) == "en"
         return if (e.isLent) {
             val od = e.daysOverdue()
             when {
-                e.returned -> "${e.person} · തിരികെ കിട്ടി"
-                od > 0 -> "${e.person} · $od ദിവസം overdue"
-                else -> "${e.person} · ${Store.fmtDate(e.dueMs)} ന് തിരികെ"
+                e.returned -> if (en) "${e.person} · returned" else "${e.person} · തിരികെ കിട്ടി"
+                od > 0 -> if (en) "${e.person} · $od days overdue" else "${e.person} · $od ദിവസം overdue"
+                else -> if (en) "${e.person} · back by ${Store.fmtDate(e.dueMs)}"
+                    else "${e.person} · ${Store.fmtDate(e.dueMs)} ന് തിരികെ"
             }
         } else {
             val od = e.daysOverdue()
             when {
-                e.returned -> "${e.person}-ന് തിരികെ കൊടുത്തു"
-                od > 0 -> "${e.person}-ന് $od ദിവസം മുൻപ് കൊടുക്കേണ്ടതായിരുന്നു"
-                else -> "${e.person}-ന് ${Store.fmtDate(e.dueMs)} ന് കൊടുക്കണം"
+                e.returned -> if (en) "Returned to ${e.person}" else "${e.person}-ന് തിരികെ കൊടുത്തു"
+                od > 0 -> if (en) "Was due to ${e.person} $od days ago"
+                    else "${e.person}-ന് $od ദിവസം മുൻപ് കൊടുക്കേണ്ടതായിരുന്നു"
+                else -> if (en) "Return to ${e.person} by ${Store.fmtDate(e.dueMs)}"
+                    else "${e.person}-ന് ${Store.fmtDate(e.dueMs)} ന് കൊടുക്കണം"
             }
         }
     }

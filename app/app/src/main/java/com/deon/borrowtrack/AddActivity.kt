@@ -42,7 +42,7 @@ class AddActivity : Activity() {
             setOnClickListener { finish() }
         }
         bar.addView(back)
-        bar.addView(Ui.tv(this, "പുതിയ entry", 16f, R.color.white, true))
+        bar.addView(Ui.tv(this, L.newEntry(this), 16f, R.color.white, true))
         root.addView(bar)
 
         val sv = ScrollView(this).apply {
@@ -59,41 +59,41 @@ class AddActivity : Activity() {
         // Toggle
         val tog = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            setBackgroundResource(R.drawable.card)
+            background = Theme.cardBg(this@AddActivity)
             setPadding(Ui.dp(this@AddActivity, 3), Ui.dp(this@AddActivity, 3),
                 Ui.dp(this@AddActivity, 3), Ui.dp(this@AddActivity, 3))
         }
-        togA = togBtn("ഞാൻ കൊടുത്തു", true) { isLent = true; paintTog() }
-        togB = togBtn("ഞാൻ വാങ്ങി", false) { isLent = false; paintTog() }
+        togA = togBtn(L.iLent(this), true) { isLent = true; paintTog() }
+        togB = togBtn(L.iBorrowed(this), false) { isLent = false; paintTog() }
         tog.addView(togA); tog.addView(togB)
         f.addView(tog)
         paintTog()
 
-        f.addView(flabel("ആര്"))
-        personEt = field("ഉദാ: Arun")
+        f.addView(flabel(L.who(this)))
+        personEt = field(L.egPerson(this))
         f.addView(personEt)
 
-        f.addView(flabel("എന്ത്"))
-        itemEt = field("ഉദാ: ₹500, Python book, Charger")
+        f.addView(flabel(L.what(this)))
+        itemEt = field(L.egItem(this))
         f.addView(itemEt)
 
-        f.addView(flabel("തീയതി"))
+        f.addView(flabel(L.dateL(this)))
         dateTv = dateField(dateMs) { ms -> dateMs = ms; dateTv.text = Store.fmtDate(ms) }
         f.addView(dateTv)
 
-        f.addView(flabel("തിരികെ തീയതി"))
+        f.addView(flabel(L.dueGeneric(this)))
         dueTv = dateField(dueMs) { ms -> dueMs = ms; dueTv.text = Store.fmtDate(ms) }
         f.addView(dueTv)
 
-        f.addView(flabel("കുറിപ്പ് (optional)"))
-        noteEt = field("എഴുതൂ…")
+        f.addView(flabel(L.noteOpt(this)))
+        noteEt = field(L.writeHint(this))
         f.addView(noteEt)
 
         sv.addView(f)
         root.addView(sv)
 
         val save = Ui.tv(this, "Save", 14f, R.color.amber_dark, true).apply {
-            setBackgroundResource(R.drawable.btn_amber)
+            background = Theme.accentBg(this@AddActivity)
             gravity = Gravity.CENTER
             setPadding(0, Ui.dp(this@AddActivity, 13), 0, Ui.dp(this@AddActivity, 13))
             val lp = LinearLayout.LayoutParams(
@@ -121,7 +121,7 @@ class AddActivity : Activity() {
 
     private fun paintTog() {
         for ((v, on) in listOf(togA to isLent, togB to !isLent)) {
-            v.setBackgroundResource(if (on) R.drawable.btn_amber else 0)
+            v.background = if (on) Theme.accentBg(this) else null
             v.setTextColor(Ui.color(this, if (on) R.color.amber_dark else R.color.grey))
         }
     }
@@ -137,7 +137,7 @@ class AddActivity : Activity() {
             setHintTextColor(Ui.color(this@AddActivity, R.color.grey2))
             setTextColor(Ui.color(this@AddActivity, R.color.white))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
-            setBackgroundResource(R.drawable.field)
+            background = Theme.fieldBg(this@AddActivity)
             val p = Ui.dp(this@AddActivity, 12)
             setPadding(p, Ui.dp(this@AddActivity, 11), p, Ui.dp(this@AddActivity, 11))
             isSingleLine = true
@@ -145,7 +145,7 @@ class AddActivity : Activity() {
 
     private fun dateField(ms: Long, onPick: (Long) -> Unit): TextView =
         Ui.tv(this, Store.fmtDate(ms), 13f, R.color.white).apply {
-            setBackgroundResource(R.drawable.field)
+            background = Theme.fieldBg(this@AddActivity)
             val p = Ui.dp(this@AddActivity, 12)
             setPadding(p, Ui.dp(this@AddActivity, 11), p, Ui.dp(this@AddActivity, 11))
             isClickable = true; isFocusable = true
@@ -170,7 +170,7 @@ class AddActivity : Activity() {
         val person = personEt.text.toString().trim()
         val item = itemEt.text.toString().trim()
         if (person.isEmpty() || item.isEmpty()) {
-            Toast.makeText(this, "ആരുടെ പേരും എന്താണെന്നും എഴുതൂ", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, L.fillToast(this), Toast.LENGTH_SHORT).show()
             return
         }
         Store.add(

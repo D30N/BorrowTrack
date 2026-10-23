@@ -22,9 +22,11 @@ class MainActivity : Activity() {
     private lateinit var statBorrowed: LinearLayout
     private lateinit var navBar: LinearLayout
     private lateinit var titleTv: TextView
+    private var seenVersion = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        seenVersion = Theme.version(this)
         Remind.ensureChannel(this)
         askNotifPerm()
         buildUi()
@@ -32,6 +34,10 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        if (Theme.version(this) != seenVersion) {
+            recreate()
+            return
+        }
         render()
     }
 
@@ -67,7 +73,7 @@ class MainActivity : Activity() {
         bar.addView(logo)
         bar.addView(Ui.spacer(this))
         val fab = Ui.tv(this, "+", 22f, R.color.amber_dark, true).apply {
-            setBackgroundResource(R.drawable.btn_amber)
+            background = Theme.accentBg(this@MainActivity)
             gravity = Gravity.CENTER
             val s = Ui.dp(this@MainActivity, 38)
             layoutParams = LinearLayout.LayoutParams(s, s)
@@ -85,8 +91,8 @@ class MainActivity : Activity() {
             val m = Ui.dp(this@MainActivity, 10)
             setPadding(m, 0, m, Ui.dp(this@MainActivity, 8))
         }
-        statLent = statCard("തിരികെ കിട്ടാനുള്ളത്")
-        statBorrowed = statCard("തിരികെ കൊടുക്കാനുള്ളത്")
+        statLent = statCard(L.statLent(this))
+        statBorrowed = statCard(L.statBorrowed(this))
         sum.addView(statLent)
         val sp = Space(this).apply {
             layoutParams = LinearLayout.LayoutParams(Ui.dp(this@MainActivity, 10), 1)
@@ -98,7 +104,7 @@ class MainActivity : Activity() {
         // Segment (home only)
         segRow = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            setBackgroundResource(R.drawable.card)
+            background = Theme.cardBg(this@MainActivity)
             val lp = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
             )
@@ -127,6 +133,42 @@ class MainActivity : Activity() {
         sv.addView(listBox)
         root.addView(sv)
 
+        // Footer: credit (tap = website) + settings gear
+        val footer = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        val credit = Ui.tv(this, "This app was made by Deon", 11f, R.color.amber).apply {
+            paintFlags = paintFlags or android.graphics.Paint.UNDERLINE_TEXT_FLAG
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            setPadding(0, Ui.dp(this@MainActivity, 8), 0, Ui.dp(this@MainActivity, 4))
+            setOnClickListener {
+                runCatching {
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            android.net.Uri.parse("https://deepakdeon.github.io")
+                        )
+                    )
+                }
+            }
+        }
+        footer.addView(credit)
+        val gear = Ui.tv(this, "⚙", 17f, R.color.grey).apply {
+            gravity = Gravity.CENTER
+            setPadding(
+                Ui.dp(this@MainActivity, 10), Ui.dp(this@MainActivity, 6),
+                Ui.dp(this@MainActivity, 14), Ui.dp(this@MainActivity, 6)
+            )
+            isClickable = true; isFocusable = true
+            setOnClickListener {
+                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+            }
+        }
+        footer.addView(gear)
+        root.addView(footer)
+
         // Bottom nav
         navBar = LinearLayout(this)
         navBar.orientation = LinearLayout.HORIZONTAL
@@ -139,7 +181,7 @@ class MainActivity : Activity() {
     private fun statCard(label: String): LinearLayout {
         val l = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setBackgroundResource(R.drawable.card)
+            background = Theme.cardBg(this@MainActivity)
             layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             val p = Ui.dp(this@MainActivity, 12)
             setPadding(p, Ui.dp(this@MainActivity, 10), p, Ui.dp(this@MainActivity, 10))
@@ -178,24 +220,41 @@ class MainActivity : Activity() {
         val title: String
         when (tab) {
             "rem" -> {
-                title = "Due soon & overdue"
+                title = L.titleRem(this)
                 list = active.filter { it.daysOverdue() > 0 || it.daysLeft() <= 3 }
                     .sortedBy { it.dueMs }
             }
             "hist" -> {
-                title = "Returned"
+                title = L.titleHist(this)
                 list = all.filter { it.returned }.sortedByDescending { it.returnedMs }
             }
             else -> {
-                title = if (seg == "lent") "ഞാൻ കൊടുത്തത്" else "ഞാൻ വാങ്ങിയത്"
+                title = if (seg == "lent") L.titleLent(this) else L.titleBorrowed(this)
                 list = active.filter { (seg == "lent") == it.isLent }
             }
         }
         titleTv.text = title
         if (list.isEmpty()) {
+            if (tab == "home") {
+                // Big centred + — the small top + is easy to miss
+                val big = Ui.tv(this, "+", 40f, R.color.amber_dark, true).apply {
+                    background = Theme.circleAccentBg(this@MainActivity)
+                    gravity = Gravity.CENTER
+                    val s = Ui.dp(this@MainActivity, 84)
+                    layoutParams = LinearLayout.LayoutParams(s, s).apply {
+                        gravity = Gravity.CENTER_HORIZONTAL
+                        topMargin = Ui.dp(this@MainActivity, 70)
+                    }
+                    isClickable = true; isFocusable = true
+                    setOnClickListener {
+                        startActivity(Intent(this@MainActivity, AddActivity::class.java))
+                    }
+                }
+                listBox.addView(big)
+            }
             listBox.addView(Ui.tv(this, emptyHint(), 12f, R.color.grey2).apply {
                 gravity = Gravity.CENTER
-                setPadding(0, Ui.dp(this@MainActivity, 40), 0, 0)
+                setPadding(0, Ui.dp(this@MainActivity, 16), 0, 0)
             })
             return
         }
@@ -203,25 +262,25 @@ class MainActivity : Activity() {
     }
 
     private fun emptyHint(): String = when (tab) {
-        "rem" -> "No dues — all clear ✓"
-        "hist" -> "Nothing returned yet"
-        else -> "No entries — tap + to add"
+        "rem" -> L.emptyRem(this)
+        "hist" -> L.emptyHist(this)
+        else -> L.emptyHome(this)
     }
 
     private fun renderSeg() {
         segRow.removeAllViews()
-        val a = Ui.tv(this, "കൊടുത്തത്", 12f,
+        val a = Ui.tv(this, L.segLent(this), 12f,
             if (seg == "lent") R.color.amber_dark else R.color.grey, seg == "lent").apply {
-            setBackgroundResource(if (seg == "lent") R.drawable.btn_amber else 0)
+            background = if (seg == "lent") Theme.accentBg(this@MainActivity) else null
             gravity = Gravity.CENTER
             layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             setPadding(0, Ui.dp(this@MainActivity, 8), 0, Ui.dp(this@MainActivity, 8))
             isClickable = true; isFocusable = true
             setOnClickListener { seg = "lent"; render() }
         }
-        val b = Ui.tv(this, "വാങ്ങിയത്", 12f,
+        val b = Ui.tv(this, L.segBorrowed(this), 12f,
             if (seg == "borrowed") R.color.amber_dark else R.color.grey, seg == "borrowed").apply {
-            setBackgroundResource(if (seg == "borrowed") R.drawable.btn_amber else 0)
+            background = if (seg == "borrowed") Theme.accentBg(this@MainActivity) else null
             gravity = Gravity.CENTER
             layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             setPadding(0, Ui.dp(this@MainActivity, 8), 0, Ui.dp(this@MainActivity, 8))
@@ -243,7 +302,7 @@ class MainActivity : Activity() {
         top.addView(item)
         top.addView(Ui.badge(this, e))
         c.addView(top)
-        c.addView(Ui.tv(this, Ui.subLine(e), 11.5f, R.color.grey).apply {
+        c.addView(Ui.tv(this, Ui.subLine(this, e), 11.5f, R.color.grey).apply {
             setPadding(0, Ui.dp(this@MainActivity, 4), 0, 0)
         })
         c.setOnClickListener {

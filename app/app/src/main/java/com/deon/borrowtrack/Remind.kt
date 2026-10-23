@@ -71,9 +71,9 @@ class ReminderReceiver : BroadcastReceiver() {
         if (e.returned) return
         Remind.ensureChannel(ctx)
         val text = if (e.isLent)
-            "${e.person} തന്ന ${e.item} തിരികെ വാങ്ങാൻ സമയമായി"
+            L.notifLent(ctx, e.person, e.item)
         else
-            "${e.person}-ന് കൊടുക്കാനുള്ള ${e.item}-ന്റെ സമയമായി"
+            L.notifBorrowed(ctx, e.person, e.item)
         val open = Intent(ctx, DetailActivity::class.java).putExtra("id", e.id)
         val pi = PendingIntent.getActivity(
             ctx, e.id.hashCode(), open,

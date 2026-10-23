@@ -22,6 +22,7 @@
 
         <activity android:name=".AddActivity" android:exported="false" />
         <activity android:name=".DetailActivity" android:exported="false" />
+        <activity android:name=".SettingsActivity" android:exported="false" />
 
         <receiver
             android:name=".ReminderReceiver"
