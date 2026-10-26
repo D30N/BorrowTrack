@@ -3,6 +3,8 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:allowBackup="true"
@@ -59,6 +61,13 @@
             android:name=".WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" />
+
+        <!-- Update APK provider (framework-only, serves cache/update/) -->
+        <provider
+            android:name=".UpdateFileProvider"
+            android:authorities="com.deon.borrowtrack.files"
+            android:exported="false"
+            android:grantUriPermissions="true" />
 
     </application>
 </manifest>

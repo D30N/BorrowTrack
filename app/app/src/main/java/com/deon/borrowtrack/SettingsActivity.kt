@@ -98,6 +98,23 @@ class SettingsActivity : Activity() {
         })
         b.addView(card3)
 
+        // Updates (English UI by design)
+        b.addView(sectionTitle("UPDATES"))
+        val card4 = settingsCard()
+        val updRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(
+                Ui.dp(this@SettingsActivity, 8), Ui.dp(this@SettingsActivity, 16),
+                Ui.dp(this@SettingsActivity, 8), Ui.dp(this@SettingsActivity, 16)
+            )
+            isClickable = true; isFocusable = true
+            setOnClickListener { UpdateCheck.check(this@SettingsActivity, manual = true) }
+        }
+        updRow.addView(Ui.tv(this, "Check for updates", 17f, R.color.white))
+        card4.addView(updRow)
+        b.addView(card4)
+
         // Credit
         b.addView(Ui.tv(this, "This app was made by Deon", 13f, R.color.amber).apply {
             paintFlags = paintFlags or android.graphics.Paint.UNDERLINE_TEXT_FLAG

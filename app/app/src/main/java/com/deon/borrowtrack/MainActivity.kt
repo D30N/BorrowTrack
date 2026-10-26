@@ -30,6 +30,7 @@ class MainActivity : Activity() {
         Remind.ensureChannel(this)
         askNotifPerm()
         buildUi()
+        UpdateCheck.autoCheck(this)
     }
 
     override fun onResume() {
