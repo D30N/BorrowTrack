@@ -26,6 +26,7 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        recordAnalytics()
         seenVersion = Theme.version(this)
         Remind.ensureChannel(this)
         askNotifPerm()
